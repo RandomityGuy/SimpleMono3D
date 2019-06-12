@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/Krishiv/source/repos/SimpleMono3D/SimpleMono3D/Content/FlatEffect.fx</SourceFile>
+  <SourceTime>2019-06-12T17:46:44.1658381+05:30</SourceTime>
+  <DestFile>C:/Users/Krishiv/source/repos/SimpleMono3D/SimpleMono3D/Content/bin/DesktopGL/Content/FlatEffect.xnb</DestFile>
+  <DestTime>2019-06-12T17:53:04.8315115+05:30</DestTime>
+  <Importer>EffectImporter</Importer>
+  <ImporterTime>2018-12-08T22:05:54+05:30</ImporterTime>
+  <Processor>EffectProcessor</Processor>
+  <ProcessorTime>2018-12-08T22:05:54+05:30</ProcessorTime>
+  <Parameters>
+    <Key>DebugMode</Key>
+    <Value>Auto</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>
