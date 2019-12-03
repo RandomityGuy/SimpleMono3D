@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SimpleMono3D.Graphics;
+using SimpleMono3D.Input;
+using System;
 
 namespace SimpleMono3D
 {
@@ -10,16 +12,31 @@ namespace SimpleMono3D
     /// </summary>
     public class SimpleMono3D : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        Scene scene;
-        Effect flatShader;
+        public static SimpleMono3D Instance;
 
-        public SimpleMono3D()
+        public GraphicsDeviceManager graphics;
+        protected SpriteBatch spriteBatch;
+        public Scene Scene;
+        Effect flatShader;
+        Effect instancedFlatShader;
+        Effect skyboxShader;
+        Model skyboxModel;
+        TextureCube skyboxTexture;
+        string skyboxTexturePath;
+        public SimpleMono3D(string skybox)
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            scene = new Scene(graphics.GraphicsDevice, Window, flatShader);
+            skyboxTexturePath = skybox;
+        }
+
+        //OVERRIDE THIS 
+        [STAThread]
+        public static void StartGame(Type gameType,string skybox)
+        {
+            Instance = (SimpleMono3D)Activator.CreateInstance(gameType, skybox);//new SimpleMono3D(skybox);
+            using (var game = Instance)
+                Instance.Run();
         }
 
         /// <summary>
@@ -33,7 +50,9 @@ namespace SimpleMono3D
             // TODO: Add your initialization logic here
 
             base.Initialize();
-            scene.SetBuffers();
+            this.IsFixedTimeStep = false;
+            //this.TargetElapsedTime = System.TimeSpan.FromMilliseconds(16);
+
         }
 
         /// <summary>
@@ -44,7 +63,13 @@ namespace SimpleMono3D
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            flatShader = Content.Load<Effect>("Content/FlatEffect");
+            flatShader = Content.Load<Effect>("FlatEffect");
+            instancedFlatShader = Content.Load<Effect>("FlatInstancedEffect");
+            skyboxShader = Content.Load<Effect>("SkyboxEffect");
+            skyboxModel = Content.Load<Model>("SkyboxCube");
+
+            skyboxTexture = Content.Load<TextureCube>(skyboxTexturePath);
+            Scene = new Scene(graphics.GraphicsDevice, Window, flatShader, skyboxShader, skyboxTexture, skyboxModel,instancedFlatShader);
             // TODO: use this.Content to load your game content here
         }
 
@@ -68,7 +93,8 @@ namespace SimpleMono3D
                 Exit();
 
             // TODO: Add your update logic here
-            scene.Update(gameTime);
+            InputManager.Update(gameTime);
+            Scene.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -78,10 +104,8 @@ namespace SimpleMono3D
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
             // TODO: Add your drawing code here
-            scene.Render();
+            Scene.Render();
             base.Draw(gameTime);
         }
     }

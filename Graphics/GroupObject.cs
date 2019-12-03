@@ -27,11 +27,8 @@ namespace SimpleMono3D.Graphics
                 if (so is GroupObject)
                 {
                     var children = GetSceneObjects((so as GroupObject).Children);
-                    children.ForEach(a => scene.AddToBuffers(a));
                     children.ForEach(a => a.scene = this.scene);
                 }
-                else
-                    scene.AddToBuffers(so);
             }
             Children.Add(so);
         }
@@ -44,18 +41,15 @@ namespace SimpleMono3D.Graphics
             if (so is GroupObject)
             {
                 var children = GetSceneObjects((so as GroupObject).Children);
-                children.ForEach(a => scene.RemoveFromBuffers(a));
                 children.ForEach(a => a.scene = null);
             }
-            else
-                scene.RemoveFromBuffers(so);
         }
 
-        public override void Render(GraphicsDevice graphics, Effect effect,EffectPass pass)
+        public override void Render(GraphicsDevice graphics, Effect effect,EffectPass pass, BoundingFrustum viewFrustum, bool isInstanced)
         {
             foreach (var so in Children)
             {
-                so.Render(graphics, effect, pass);
+                so.Render(graphics, effect, pass,viewFrustum,isInstanced);
             }
         }
 
