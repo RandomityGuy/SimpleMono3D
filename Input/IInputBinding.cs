@@ -13,6 +13,7 @@ namespace SimpleMono3D.Input
         Pressed,
         Released,
         Held,
+        StateChanged,
         None
     }
 

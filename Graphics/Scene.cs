@@ -2,13 +2,21 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using SimpleMono3D.UI;
+using System.Linq;
 
 namespace SimpleMono3D.Graphics
 {
+    public struct SearchInfo
+    {
+        public List<Vector3> Points;
+        public SceneObject Object;
+    }
     public class Scene
     {
 
         public GraphicsDevice graphics;
+        public SpriteBatch spritebatch;
         public Camera camera;
         public Skybox skybox;
 
@@ -19,6 +27,10 @@ namespace SimpleMono3D.Graphics
         bool ready;
 
         public List<SceneObject> Objects = new List<SceneObject>();
+
+        public GuiControl Canvas;
+
+        public bool RenderDebug = false;
 
         public T Find<T>()
         {
@@ -41,16 +53,23 @@ namespace SimpleMono3D.Graphics
             return l;
         }
 
-        public Scene(GraphicsDevice device, GameWindow gameWindow, Effect flatShader,Effect skyboxShader,TextureCube skyboxTexture,Model skyboxModel,Effect instancingEffect)
+        public Scene(GraphicsDevice device, SpriteBatch spritebatch, GameWindow gameWindow, Effect flatShader, Effect skyboxShader, TextureCube skyboxTexture, Model skyboxModel, Effect instancingEffect)
         {
             graphics = device;
-            camera = new Camera(gameWindow,Vector3.Up,Vector3.One);
+            camera = new Camera(gameWindow, Vector3.Up, Vector3.One);
             effect = flatShader;
             window = gameWindow;
             this.instancingEffect = instancingEffect;
             skybox = new Skybox(skyboxTexture, skyboxShader, skyboxModel);
             device.RasterizerState = new RasterizerState();
             ready = false;
+            Canvas = new GuiControl()
+            {
+                Position = Vector2.Zero,
+                Size = new Vector2(device.Viewport.Bounds.Width, device.Viewport.Bounds.Height)
+            };
+            Canvas.AddChild(new GuiCursor());
+            this.spritebatch = spritebatch;
             //effect.EnableDefaultLighting();
            // effect.PreferPerPixelLighting = false;
             //effect.World = Matrix.Identity;
@@ -136,6 +155,81 @@ namespace SimpleMono3D.Graphics
                 Objects.ForEach(a => a.Render(graphics, instancingEffect, pass, viewfrustum,true));
             }
             graphics.RasterizerState = new RasterizerState() { CullMode = CullMode.CullCounterClockwiseFace };
+
+            if (RenderDebug)
+                Canvas.DebugRender(spritebatch);
+            else
+            {
+                Canvas.Render(spritebatch);
+            }
+
+        }
+
+        public List<SearchInfo> NearestNeighbourSearch(Vector3 pt,int count)
+        {
+            var objs = Objects.Where(a => a.Static);
+            objs = objs.OrderBy(a => (pt - a.WorldTransform.Translation).LengthSquared()).ToList();
+
+            var ret = new List<SearchInfo>();
+
+            foreach (var obj in objs)
+            {
+                if (count <= 0)
+                    break;
+
+                var sInfo = new SearchInfo();
+
+                var relpos = pt - obj.WorldTransform.Translation;
+                sInfo.Points = obj.Geometry.NearestNeighbourSearch(pt, count).Select(a => a + obj.WorldTransform.Translation).ToList();
+                sInfo.Object = obj;
+                count -= sInfo.Points.Count;
+                if (sInfo.Points.Count != 0)
+                    ret.Add(sInfo);
+            }
+            return ret;
+        }
+
+        public List<SearchInfo> RadiusSearch(Vector3 pt, int count,float radius)
+        {
+            var objs = Objects.Where(a => a.Static);
+            objs = objs.OrderBy(a => (pt - a.WorldTransform.Translation).LengthSquared()).ToList();
+
+            var ret = new List<SearchInfo>();
+
+            foreach (var obj in objs)
+            {
+                if (count <= 0)
+                    break;
+
+                var sInfo = new SearchInfo();
+
+                var relpos = pt - obj.WorldTransform.Translation;
+                sInfo.Points = obj.Geometry.RadiusSearch(pt, count,radius).Select(a => a + obj.WorldTransform.Translation).ToList();
+                sInfo.Object = obj;
+                count -= sInfo.Points.Count;
+                if (sInfo.Points.Count != 0)
+                    ret.Add(sInfo);
+            }
+            return ret;
+        }
+
+        public List<SceneObject> BoundingSearch(BoundingSphere sphere,int count)
+        {
+            var objs = Objects.Where(a => a.Static);
+            objs = objs.OrderBy(a => (sphere.Center - a.WorldTransform.Translation).LengthSquared()).ToList();
+
+            var ret = new List<SceneObject>();
+            foreach (var obj in objs)
+            {
+                if (count <= 0)
+                    break;
+
+                if (obj.Bounds.Intersects(sphere))
+                    ret.Add(obj);
+
+                count--;
+            }
+            return ret;
         }
 
         public void Update(GameTime dt)

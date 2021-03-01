@@ -12,8 +12,8 @@ namespace SimpleMono3D.Input
     {
         public static List<IInputBinding> Bindings { get; set; } = new List<IInputBinding>();
 
-        static KeyboardState PreviousKeyboardState;
-        static MouseState PreviousMouseState;
+        public static KeyboardState PreviousKeyboardState;
+        public static MouseState PreviousMouseState;
 
         public static void Update(GameTime span)
         {

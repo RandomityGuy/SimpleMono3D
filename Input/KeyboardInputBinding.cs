@@ -16,7 +16,7 @@ namespace SimpleMono3D.Input
         internal Action<object,GameTime, KeyboardState> func;
         internal InputBindingType type;
 
-        public KeyboardInputBinding(Keys key,Action<object,GameTime,KeyboardState> func,InputBindingType type,Modifiers modifiers = 0)
+        public KeyboardInputBinding(Keys key,Action<object,GameTime,KeyboardState> func,InputBindingType type,Modifiers modifiers = 0)      
         {
             this.key = key;
             this.func = func;
@@ -57,13 +57,16 @@ namespace SimpleMono3D.Input
             switch (type)
             {
                 case InputBindingType.Pressed:
-                    return kb.IsKeyDown(key) && kb.IsKeyUp(key); 
+                    return kb.IsKeyDown(key) && prevkb.IsKeyUp(key); 
 
                 case InputBindingType.Released:
                     return !kb.IsKeyDown(key) && prevkb.IsKeyDown(key);
 
                 case InputBindingType.Held:
                     return kb.IsKeyDown(key) && prevkb.IsKeyDown(key);
+
+                case InputBindingType.StateChanged:
+                    return kb.IsKeyDown(key) != prevkb.IsKeyDown(key);
 
                 case InputBindingType.None:
                     return true;

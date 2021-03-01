@@ -92,6 +92,9 @@ namespace SimpleMono3D.Input
                 case InputBindingType.Held:
                     return mb.IsButtonDown(button) && prevMb.IsButtonDown(button);
 
+                case InputBindingType.StateChanged:
+                    return mb.X != prevMb.X || mb.Y != prevMb.Y;
+
                 case InputBindingType.None:
                     return true;
 

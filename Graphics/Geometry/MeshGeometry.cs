@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KdTree;
 
 namespace SimpleMono3D.Graphics.Geometry
 {
@@ -22,8 +23,11 @@ namespace SimpleMono3D.Graphics.Geometry
         public List<FaceGroup> FaceGroups;
         public List<Vector2> UV;
         public List<Vector3> Normals;
+        public KdTree<float,Vector3> KdTree;
+
         VertexBuffer vertexBuffer;
         BoundingBox? _staticBounds = null;
+
 
         internal bool canRender;
 
@@ -45,8 +49,27 @@ namespace SimpleMono3D.Graphics.Geometry
                     FaceGroups[i].indexBuffer.SetData(FaceGroups[i].Indices.ToArray());
                 }
 
+                KdTree = new KdTree<float, Vector3>(3, new KdTree.Math.FloatMath());
+
+                foreach (var v in Positions)
+                {
+                    KdTree.Add(new float[] { v.X, v.Y, v.Z }, v);
+                }
+
                 canRender = true;
             }
+        }
+
+        public List<Vector3> NearestNeighbourSearch(Vector3 pt,int count)
+        {
+            if (!canRender) return new List<Vector3>();             
+            return KdTree.GetNearestNeighbours(new float[] { pt.X, pt.Y, pt.Z }, count).Select(a => a.Value).ToList();
+        }
+
+        public List<Vector3> RadiusSearch(Vector3 pt,int count,float radius)
+        {
+            if (!canRender) return new List<Vector3>();
+            return KdTree.RadialSearch(new float[] { pt.X, pt.Y, pt.Z },radius, count).Select(a => a.Value).ToList();
         }
 
         public virtual void Render(GraphicsDevice graphics, Effect effect, EffectPass pass)
@@ -61,12 +84,13 @@ namespace SimpleMono3D.Graphics.Geometry
                 {
                     if (facegroup.Material is ColorMaterial)
                     {
-                        effect.Parameters["IsColorModel"].SetValue(true);
+                        effect.Parameters["ModelTexture"].SetValue(facegroup.Material.Texture);
+                        //effect.Parameters["IsColorModel"].SetValue(true);
 
-                        var colorvec = (facegroup.Material as ColorMaterial).color.ToVector4();
-                        colorvec /= 255;
+                        //var colorvec = (facegroup.Material as ColorMaterial).color.ToVector4();
+                        //colorvec /= 255;
 
-                        effect.Parameters["ModelColor"].SetValue(colorvec);
+                        //effect.Parameters["ModelColor"].SetValue(colorvec);
                     }
                     else
                     {

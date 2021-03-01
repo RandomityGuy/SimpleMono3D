@@ -15,17 +15,19 @@ namespace SimpleMono3D
         public static SimpleMono3D Instance;
 
         public GraphicsDeviceManager graphics;
-        protected SpriteBatch spriteBatch;
+        public SpriteBatch spriteBatch;
         public Scene Scene;
         Effect flatShader;
         Effect instancedFlatShader;
         Effect skyboxShader;
+        public Effect GuiRenderEffect;
         Model skyboxModel;
         TextureCube skyboxTexture;
+        public SpriteFont defaultFont;
         string skyboxTexturePath;
         public SimpleMono3D(string skybox)
         {
-            graphics = new GraphicsDeviceManager(this);
+            graphics = new GraphicsDeviceManager(this) { PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8 };
             Content.RootDirectory = "Content";
             skyboxTexturePath = skybox;
         }
@@ -67,9 +69,11 @@ namespace SimpleMono3D
             instancedFlatShader = Content.Load<Effect>("FlatInstancedEffect");
             skyboxShader = Content.Load<Effect>("SkyboxEffect");
             skyboxModel = Content.Load<Model>("SkyboxCube");
+            defaultFont = Content.Load<SpriteFont>("DefaultFont");
+            GuiRenderEffect = Content.Load<Effect>("GuiRenderEffect");
 
             skyboxTexture = Content.Load<TextureCube>(skyboxTexturePath);
-            Scene = new Scene(graphics.GraphicsDevice, Window, flatShader, skyboxShader, skyboxTexture, skyboxModel,instancedFlatShader);
+            Scene = new Scene(graphics.GraphicsDevice, spriteBatch,Window, flatShader, skyboxShader, skyboxTexture, skyboxModel,instancedFlatShader);
             // TODO: use this.Content to load your game content here
         }
 

@@ -7,11 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SimpleMono3D.Graphics.Geometry
-{
+{ 
+
     public interface IGeometry : IDisposable
     {
 
         void Render(GraphicsDevice graphics, Effect effect, EffectPass pass);
+
+        List<Vector3> NearestNeighbourSearch(Vector3 pt, int count);
+
+        List<Vector3> RadiusSearch(Vector3 pt, int count, float radius);
 
         void RenderInstanced(GraphicsDevice graphics, Effect effect, EffectPass pass, int instancecount, VertexBuffer instanceVertexBuffer);
 

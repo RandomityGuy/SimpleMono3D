@@ -35,7 +35,11 @@ namespace SimpleMono3D.Graphics.Materials
 
         public static ColorMaterial Indigo => ColorMaterial.FromColor(Color.Indigo);
 
+        public static ColorMaterial LightGray => ColorMaterial.FromColor(Color.LightGray);
+
         public static ColorMaterial Gray => ColorMaterial.FromColor(Color.Gray);
+
+        public static ColorMaterial DarkGray => ColorMaterial.FromColor(Color.DarkGray);
 
         public static ColorMaterial Pink => ColorMaterial.FromColor(Color.Pink);
     }

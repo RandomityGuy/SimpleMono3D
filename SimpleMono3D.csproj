@@ -14,6 +14,8 @@
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -60,14 +62,34 @@
     <Compile Include="Graphics\Scene.cs" />
     <Compile Include="Graphics\SceneObject.cs" />
     <Compile Include="Graphics\Skybox.cs" />
+    <Compile Include="Input\AnyKeyInputBinding.cs" />
     <Compile Include="Input\IInputBinding.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\KeyboardInputBinding.cs" />
+    <Compile Include="Input\KeyCodeToText.cs" />
     <Compile Include="Input\MouseButtonInputBinding.cs" />
     <Compile Include="SimpleMono3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\GuiAlignmentPanel.cs" />
+    <Compile Include="UI\GuiTextbox.cs" />
+    <Compile Include="UI\GuiTextButton.cs" />
+    <Compile Include="UI\GuiButton.cs" />
+    <Compile Include="UI\GuiControl.cs" />
+    <Compile Include="UI\GuiCursor.cs" />
+    <Compile Include="UI\GuiGridPanel.cs" />
+    <Compile Include="UI\GuiPanel.cs" />
+    <Compile Include="UI\GuiRectangle.cs" />
+    <Compile Include="UI\GuiScrollBar.cs" />
+    <Compile Include="UI\GuiScrollPanel.cs" />
+    <Compile Include="UI\GuiStackPanel.cs" />
+    <Compile Include="UI\GuiText.cs" />
+    <Compile Include="UI\LocationDescription.cs" />
+    <Compile Include="UI\TextField.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="KdTreeLib, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\KdTree.1.4.1\lib\net45\KdTreeLib.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -125,10 +147,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.manifest" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\FlatEffect.fx" />
     <Content Include="Content\FlatInstancedEffect.fx" />
+    <Content Include="Content\GuiRenderEffect.fx" />
     <Content Include="Content\SkyboxEffect.fx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

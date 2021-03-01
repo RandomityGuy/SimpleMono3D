@@ -130,32 +130,32 @@ namespace SimpleMono3D.Graphics
             var v2 = new Vector3(centre.X - (size.X / 2), centre.Y + (size.Y / 2), centre.Z - (size.Z / 2)); //Top left back
             var v3 = new Vector3(centre.X + (size.X / 2), centre.Y - (size.Y / 2), centre.Z - (size.Z / 2)); //Bottom right back
             var v4 = new Vector3(centre.X + (size.X / 2), centre.Y + (size.Y / 2), centre.Z - (size.Z / 2)); //Top right back
-            AddTriangle(v3, v2, v1, uv1, uv4, uv3,ColorMaterials.White);
-            AddTriangle(v4, v2, v3,uv2, uv4, uv1, ColorMaterials.White);
+            AddTriangle(v1, v2, v3, uv3, uv4, uv1,ColorMaterials.White);
+            AddTriangle(v3, v2, v4,uv1, uv4, uv2, ColorMaterials.White);
 
             //Frontface
             var v5 = new Vector3(centre.X - (size.X / 2), centre.Y - (size.Y / 2), centre.Z + (size.Z / 2)); //Bottom left front
             var v6 = new Vector3(centre.X - (size.X / 2), centre.Y + (size.Y / 2), centre.Z + (size.Z / 2)); //Top left front
             var v7 = new Vector3(centre.X + (size.X / 2), centre.Y - (size.Y / 2), centre.Z + (size.Z / 2)); //Bottom right front
             var v8 = new Vector3(centre.X + (size.X / 2), centre.Y + (size.Y / 2), centre.Z + (size.Z / 2)); //Top right front
-            AddTriangle(v5, v6, v7,uv1,uv2,uv3, ColorMaterials.White);
-            AddTriangle(v8, v7, v6,uv4,uv3,uv2, ColorMaterials.White);
+            AddTriangle(v7, v6, v5,uv3,uv2,uv1, ColorMaterials.White);
+            AddTriangle(v6, v7, v8,uv2,uv3,uv4, ColorMaterials.White);
 
             //Leftface
-            AddTriangle(v2, v5, v1,uv4,uv1,uv3, ColorMaterials.White);
-            AddTriangle(v5, v2, v6,uv1,uv3,uv2, ColorMaterials.White);
+            AddTriangle(v1, v5, v2,uv3,uv1,uv4, ColorMaterials.White);
+            AddTriangle(v6, v2, v5,uv2,uv3,uv1, ColorMaterials.White);
 
             //Rightface
-            AddTriangle(v7, v8, v4, uv4, uv1, uv3, ColorMaterials.White);
-            AddTriangle(v4, v3, v7, uv1, uv3, uv2, ColorMaterials.White);
+            AddTriangle(v4, v8, v7, uv3, uv1, uv4, ColorMaterials.White);
+            AddTriangle(v7, v3, v4, uv2, uv3, uv1, ColorMaterials.White);
 
             //Topface
-            AddTriangle(v2, v8, v6,uv2,uv3,uv1, ColorMaterials.White);
-            AddTriangle(v2, v4, v8,uv2,uv4,uv3, ColorMaterials.White);
+            AddTriangle(v6, v8, v2,uv1,uv3,uv2, ColorMaterials.White);
+            AddTriangle(v8, v4, v2,uv3,uv4,uv2, ColorMaterials.White);
 
             //Bottomface
-            AddTriangle(v1, v5, v7, uv2, uv3, uv1, ColorMaterials.White);
-            AddTriangle(v7, v3, v1,uv2,uv4,uv3, ColorMaterials.White);
+            AddTriangle(v7, v5, v1, uv1, uv3, uv2, ColorMaterials.White);
+            AddTriangle(v1, v3, v7,uv1,uv4,uv2, ColorMaterials.White);
         }
 
         public void AddObject(Obj o)
